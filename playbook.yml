@@ -1,0 +1,32 @@
+---
+- name: Install satellite
+  connection: local
+  hosts: all
+  tasks:
+    - name: Install pre-reqs
+      become: yes
+      package:
+        name: '{{item}}'
+        state: latest
+      loop:
+        - http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+        - https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+        - https://yum.theforeman.org/releases/1.14/el7/x86_64/foreman-release.rpm
+        - http://fedorapeople.org/groups/katello/releases/yum/3.3/katello/el7/x86_64/katello-repos-latest.rpm
+        - foreman-release-scl
+    - name: Update
+      become: yes
+      yum:
+        name: '*'
+        state: latest
+    - name: Foreman Katello
+      become: yes
+      package:
+        name: '{{item}}'
+        state: latest
+      loop:
+        - foreman-installer
+        - katello
+    - name: "Install Satellite 6"
+      become: yes
+      command: "foreman-installer --scenario katello"
