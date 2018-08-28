@@ -29,4 +29,4 @@
         - katello
     - name: "Install Satellite 6"
       become: yes
-      command: "foreman-installer --scenario katello"
+      command: "foreman-installer --scenario katello --foreman-admin-password=ChangeMe"
